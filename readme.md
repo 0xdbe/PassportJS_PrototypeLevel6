@@ -28,7 +28,9 @@ CLIENT_ID=xxxxxxxxxxxxxxxx \
 CLIENT_SECRET=yyyyyyyyyyyyyyyyyyyyy \
 MONGOURI=mongodb://username:password@hostname:27017/MyApp \
 JWT_SECRET=Secret \
-SECURE_COOKIE=0 npm start
+SECURE_COOKIE=no npm start
 ```
+
+Set "SECURE_COOKIE=no" only for testing purpose. For production, you should have a HTTPS endpoint in front of your application and set "SECURE_COOKIE=yes".
 
 * Test it by opening your browser on http://127.0.0.1:3000/signin/github and accept the authorization request on GitHub
