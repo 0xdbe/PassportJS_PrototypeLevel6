@@ -9,7 +9,19 @@ MyMongoose.connect(process.env.MONGOURI,{ useNewUrlParser: true })
     console.log('Could not connect to MongoDB.');
     process.exit();
   });
+  
+// Setup Redis
+const MyRedis = require('redis');
+const MyRedisClient = MyRedis.createClient();
 
+MyRedisClient.on('connect', function(){
+    console.log('Successfully connected to Redis');
+});
+
+MyRedisClient.on('error', function(err) {
+     console.log('Redis error: ' + err);
+     process.exit();
+});
 
 var createError = require('http-errors');
 var express = require('express');
@@ -43,6 +55,10 @@ app.use('/', indexRouter);
 // route for signin
 const SigninRouter = require('./routes/signin.js');
 app.use('/signin', SigninRouter);
+
+// route for signout
+const SignoutRouter = require('./routes/signout.js');
+app.use('/signout', MyPassport.authenticate('cookie', {session: false}), SignoutRouter);
 
 // Restricted route
 const PrivateRouter = require('./routes/private.js');

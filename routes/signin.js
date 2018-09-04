@@ -5,8 +5,9 @@ const router = express.Router();
 // Passport Setup
 const MyPassport = require('passport');
 
-// Import JWT module
+// Import JWT module and UUID tool
 const jwt = require('jsonwebtoken');
+const uuidv4 = require('uuid/v4')
 
 // route to start OAuth2 authentication flow with Github
 router.get('/github',MyPassport.authenticate('github'));
@@ -23,8 +24,11 @@ router.get('/github/callback',
     // define the token payload
     let payload = {id: req.user.id, username: req.user.username}
     
+    // Define the JWT Identifier with a UUID
+    let jti = uuidv4();
+    
     // sign the token
-    let token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m', algorithm: 'HS512'});
+    let token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m', jwtid: jti, algorithm: 'HS512'});
     
     // send the token in a secure cookie
     if(process.env.SECURE_COOKIE == "yes"){

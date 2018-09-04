@@ -43,51 +43,54 @@ MyPassport.use(new MyGitHubStrategy(
 ));
 
 
+
 // Import Cookie Strategy for Passport
-MyCookieStrategy = require('passport-cookie').Strategy;
+const MyCookieStrategy = require('passport-cookie').Strategy;
 
 // Import JWT module
 const jwt = require('jsonwebtoken');
+
+// Redis Setup
+const MyRedis = require('redis');
+const MyRedisClient = MyRedis.createClient();
 
 // Configure the cookie Strategy for Passport
 MyPassport.use(new MyCookieStrategy(
 
   function (token, done) {
     
-    console.log(token);
-    
     // Check JWT
     jwt.verify(token, process.env.JWT_SECRET, function(err, payload) {
       
       // If checking failed
       if (err) {
-        return done(err)
-      };
+        return done(err);
+      }
       
       // If user is empty
       if (!payload){
         return done(null, false);
       }
       
-      // Find user in database
-      
-      MyUser.findById(payload.id, function (err, user) {
-      
-        // If technical error occurs (such as loss connection with database)
+      // If token is revoked
+      MyRedisClient.get(payload.jti, function (err, value) {
+        
+         // If checking failed
         if (err) {
           return done(err);
         }
       
-        // If user doesn't exist
-        if (!user) {
+        // If JWT is revoked
+        if (value !== null) {
+          console.log("JWT " + payload.jti + "is revoked !");
           return done(null, false);
         }
-      
+    
         // If everything all right, the user will be authenticated
-        return done(null, user);
-      
-    });
-      
+        return done(null, payload);
+        
+      });
+
   });
 }));
 

@@ -1,11 +1,11 @@
-This application is a demonstration prototype just to show how to use PassportJS and Passport GitHub Strategy. This prototype is the fifth level that implements user authentication with Social Login (GitHub), a user repository with MongoDB and handle authentication with cookie-based token (JWT).
+This application is a demonstration prototype just to show how to use PassportJS and Passport GitHub Strategy. This prototype is the fifth level that implements user authentication with Social Login (GitHub), a user repository with MongoDB and handle authentication with cookie-based token (JWT). JWTs are revocked in redis database
 
 # Getting started
 
 * Download this prototype
 
 ```console
-$ git clone https://github.com/0xdbe/PassportJS_PrototypeLevel5.git
+$ git clone https://github.com/0xdbe/PassportJS_PrototypeLevel6.git
 ```
 
 * Install required dependencies
@@ -34,3 +34,7 @@ SECURE_COOKIE=no npm start
 Set "SECURE_COOKIE=no" only for testing purpose. For production, you should have a HTTPS endpoint in front of your application and set "SECURE_COOKIE=yes".
 
 * Test it by opening your browser on http://127.0.0.1:3000/signin/github and accept the authorization request on GitHub
+
+* Open this route to logout: http://127.0.0.1:3000/signout
+
+* Try to access to the private route: http://127.0.0.1:3000/private/greeting
